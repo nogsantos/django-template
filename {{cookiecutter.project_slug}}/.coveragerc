@@ -1,0 +1,10 @@
+[coverage:run]
+source = .
+omit =
+    */**/migrations/*.py
+    */**/tests/*.py
+    */wsgi.py
+    */settings.py
+    */**/apps.py
+[coverage:report]
+omit = */tests/*,{{ cookiecutter.project_slug }}/wsgi.py

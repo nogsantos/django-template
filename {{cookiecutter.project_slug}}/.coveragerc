@@ -1,5 +1,5 @@
 [coverage:run]
-source = .
+source = {{ cookiecutter.project_slug }}
 omit =
     */**/migrations/*.py
     */**/tests/*.py

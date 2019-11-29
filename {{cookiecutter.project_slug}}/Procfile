@@ -1,0 +1,1 @@
+web: run-program gunicorn {{ cookiecutter.project_slug }}.wsgi --log-file -

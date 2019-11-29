@@ -1,19 +1,17 @@
-import os
+# import os
 
 
-def remove_graphql_files():
-    if "{{ cookiecutter.use_graphql }}".lower() == "n":
-        os.remove("core/schema.py")
-
-
-def remove_nameko_files():
-    if "{{ cookiecutter.use_nameko }}".lower() == "n":
-        os.remove("core/sync.py")
+def sample():
+    """
+        Ex.:
+        if "{{ cookiecutter.use_database_schema }}".lower() == "n":
+            os.remove("core/schema.py")
+    """
+    pass
 
 
 def main():
-    remove_graphql_files()
-    remove_nameko_files()
+    sample()
 
 
 if __name__ == "__main__":

@@ -4,25 +4,20 @@ import sys
 {%- endif %}
 
 from unipath import Path
-from decouple import config
+from decouple import config, Csv
 from dj_database_url import parse as dburl
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = Path(__file__).ancestor(3)
 APPS_DIR = ROOT_DIR.child('{{ cookiecutter.project_slug }}')
-
 SECRET_KEY = config('SECRET_KEY', default="!!!SET SECRET_KEY!!!",)
-
 DEBUG = config('DEBUG', default=False, cast=bool)
-
 {% if cookiecutter.use_database_schema == "y" -%}
 USE_SCHEMA = config('USE_SCHEMA', default=False, cast=bool)
 {%- endif %}
-
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 # Application definition
-
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -35,9 +30,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'django_extensions',
-    {% if cookiecutter.use_graphql == "y" -%}
-    'graphene_django',
-    {%- endif %}
 ]
 
 LOCAL_APPS = [
@@ -139,12 +131,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-{% if cookiecutter.use_graphql == "y" %}
-GRAPHENE = {
-    'SCHEMA': 'core.schema.schema',
-}
-{% endif %}
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -171,3 +157,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # noqa
     'PAGE_SIZE': 10
 }
+
+# Send mail configurations
+# For development, use Mailcatcher: https://mailcatcher.me/
+
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

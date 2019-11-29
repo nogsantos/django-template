@@ -5,6 +5,9 @@ staticfiles
 temp
 .idea
 
+.{{ cookiecutter.project_slug }}
+output_test.*
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

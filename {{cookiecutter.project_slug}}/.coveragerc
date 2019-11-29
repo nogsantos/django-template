@@ -1,10 +1,12 @@
 [coverage:run]
 source = {{ cookiecutter.project_slug }}
 omit =
-    */**/migrations/*.py
-    */**/tests/*.py
     */wsgi.py
     */settings.py
+    */**/migrations/*.py
+    */**/tests/*.py
     */**/apps.py
+    */**/admin.py
+    */**/urls.py
 [coverage:report]
 omit = */tests/*,{{ cookiecutter.project_slug }}/wsgi.py

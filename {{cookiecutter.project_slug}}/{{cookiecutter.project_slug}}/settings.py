@@ -10,7 +10,7 @@ from dj_database_url import parse as dburl
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = Path(__file__).ancestor(3)
 APPS_DIR = ROOT_DIR.child('{{ cookiecutter.project_slug }}')
-SECRET_KEY = config('SECRET_KEY', default="!!!SET SECRET_KEY!!!",)
+SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 {% if cookiecutter.use_database_schema == "y" -%}
 USE_SCHEMA = config('USE_SCHEMA', default=False, cast=bool)
@@ -30,6 +30,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'django_extensions',
+    'drf_yasg',
 ]
 
 LOCAL_APPS = [
@@ -84,7 +85,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'  # noqa: E501
     },
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'   # noqa: E501
+    },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'  # noqa: E501
     },

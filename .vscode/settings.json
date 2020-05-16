@@ -1,0 +1,6 @@
+{
+  "python.pythonPath": "~/.cache/pypoetry/virtualenvs/django-template-Qe215Cp5-py3.7",
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "editor.rulers": [79]
+}

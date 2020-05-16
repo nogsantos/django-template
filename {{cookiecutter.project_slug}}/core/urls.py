@@ -2,10 +2,10 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from core.views import HealthCheckViewSet
+from core.views import CheckViewSet
 
 routers = DefaultRouter()
-routers.register('', HealthCheckViewSet, base_name='core')
+routers.register('', CheckViewSet, basename='core')
 
 urlpatterns = [
     path('', include(routers.get_urls()))

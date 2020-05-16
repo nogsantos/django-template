@@ -149,5 +149,4 @@ dmypy.json
 ### Coverage report ###
 .coverage
 htmlcov
-
-# End of https://www.gitignore.io/api/python,visualstudiocode
+*.egg-info/

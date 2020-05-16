@@ -2,35 +2,38 @@
 
 {{ cookiecutter.description }}
 
+{% if cookiecutter.open_source_license != "Not open source" %}
+
+License {{cookiecutter.open_source_license}}
+{% endif %}
+
 ## Setup
 
-1. Create virtual env with `virtualenv`
-2. Enable virtual env
-3. Install dev dependencies
-4. Migrate the database
-5. Run the server
+Requirement, [Poetry](https://python-poetry.org/docs/#installation) for dependency management
+
+For development environment:
 
 ```console
-virtualenv .{{ cookiecutter.project_slug }} -p python3
-source .{{ cookiecutter.project_slug }}/bin/activate
-pip install -r requirements-dev.txt
+poetry install
+poetry shell
 ./manage.py migrate
-./manage.py runserver
+./start-dev.sh
 ```
 
 Access
 
-http://127.0.0.1:8000/api/v1/health-check/
+http://127.0.0.1:8000
 
 ### Tools
 
-**Lint**
+**Lint with virtual env enabled**
 
 ```console
+black .
 flake8 .
 ```
 
-**tests-coverage**
+**tests-coverage with virtual env enabld**
 
 ```console
 coverage run manage.py test -v 2 --noinput --failfast --parallel
@@ -38,6 +41,7 @@ coverage report -m
 coverage html
 ```
 
+{% if cookiecutter.use_heroku == "y" -%}
 ## Publish
 
 To publis on heroku [The Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
@@ -57,3 +61,4 @@ heroku config:set DEBU=False
 # email configurations
 git push heroku master --force
 ```
+{%- endif %}

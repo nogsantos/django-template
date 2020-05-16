@@ -1,4 +1,4 @@
-# Django base project
+# Django Template
 
 ## Setup
 
@@ -9,5 +9,5 @@ pip install -U cookiecutter
 **Create the project**
 
 ```bash
-cookiecutter https://github.com/nogsantos/django-base-project
+cookiecutter https://github.com/nogsantos/django-template
 ```

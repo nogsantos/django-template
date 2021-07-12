@@ -1,29 +1,56 @@
-{% if cookiecutter.alpine_image == "y" -%}
-FROM python:{{ cookiecutter.python_version }}-alpine
-{% elif cookiecutter.alpine_image == "n" -%}
-FROM python:{{ cookiecutter.python_version }}
-{%- endif %}
+# =============================================================================
+# base
+# =============================================================================
+FROM python:{{ cookiecutter.python_version }} as base
 
 ENV PYTHONUNBUFFERED 1
 
-{% if cookiecutter.alpine_image == "y" -%}
-RUN apk update && \
- apk add postgresql-libs && \
- apk add --virtual .build-deps gcc musl-dev postgresql-dev bash make
-{% elif cookiecutter.alpine_image == "n" -%}
-RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev &&  \
+RUN apt-get update && apt-get install -y \
+    --no-install-recommends libpq-dev &&  \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archive/*.deb
-{%- endif %}
 
 RUN pip install --upgrade pip
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+RUN pip install poetry
 
-RUN mkdir /code
-WORKDIR /code
-
-COPY pyproject.toml /code/
-COPY poetry.lock /code/
-
-RUN poetry install
-
-ADD . /code/
+WORKDIR /app
+COPY pyproject.toml poetry.lock /app/
+COPY entrypoint.sh /usr/local/bin/
+RUN poetry config virtualenvs.create false
+# =============================================================================
+# dev
+# =============================================================================
+FROM base as base_dev
+RUN poetry install --no-root
+COPY . /app/
+# =============================================================================
+# linter
+# =============================================================================
+FROM base_dev AS linter
+RUN black --check --diff .
+# =============================================================================
+# development
+# =============================================================================
+FROM base_dev as development
+ENV DEBUG true
+ENV ALLOWED_HOSTS *
+ENV ELASTIC_APM_ENABLED false
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["dev"]
+{% if cookiecutter.use_nameko == "y" -%}
+# =============================================================================
+# service
+# =============================================================================
+FROM base_dev as service
+ENV DEBUG true
+ENV ELASTIC_APM_ENABLED false
+CMD ["nameko", "run", "--config", "config.yaml", "core.services"]
+{%- endif %}
+# =============================================================================
+# release prod
+# =============================================================================
+FROM base as release
+ENV DEBUG false
+RUN poetry install --no-dev --no-root
+COPY . /app/
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["prd"]

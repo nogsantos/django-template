@@ -6,7 +6,7 @@
     "author_name": "Fabricio Nogueira",
     "domain_name": "https://fabricionogueira.me",
     "email": "nogsantos@gmail.com",
-    "version": "0.1.0",    
+    "version": "0.1.0",
     "open_source_license": [
         "MIT",
         "BSD",
@@ -14,8 +14,7 @@
         "Apache Software License 2.0",
         "Not open source"
     ],
-    "python_version": "3.7",
-    "alpine_image": "y",
+    "python_version": "3.9.6",
     "use_graphql": "n",
     "use_nameko": "n",
     "use_broker": "n",

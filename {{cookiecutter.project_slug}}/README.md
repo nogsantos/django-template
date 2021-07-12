@@ -20,6 +20,8 @@ poetry shell
 ./start-dev.sh
 ```
 
+> In container, is required generate the poetry.lock before the build.
+
 Access
 
 http://127.0.0.1:8000

@@ -1,5 +1,8 @@
 version: "3.7"
 
+volumes:
+  pgdata:
+
 services:
   db:
     image: postgres
@@ -24,23 +27,32 @@ services:
   {%- endif %}
   {{ cookiecutter.project_slug }}:
     build:
-      context: ./{{ cookiecutter.project_slug }}
-      dockerfile: Dockerfile
+      context: .
+      target: development
     container_name: {{ cookiecutter.project_slug }}
-    command: ./start-dev.sh
     ports:
       - {{ cookiecutter.server_port }}:{{ cookiecutter.server_port }}
     depends_on:
       - db
     volumes:
-      - ./{{ cookiecutter.project_slug }}:/code
-    environment:
-      - DEBUG=True      
-      - ALLOWED_HOSTS=*
-      - DJANGO_SETTINGS_MODULE={{ cookiecutter.project_slug }}.settings
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/{{ cookiecutter.project_slug }}      
+      - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
+    env_file: .env
     stdin_open: true
     tty: true
     restart: on-failure
-volumes:
-  pgdata:
+  {% if cookiecutter.use_broker == "y" -%}
+  {{ cookiecutter.project_slug }}-service:
+    build:
+      context: .
+      target: service
+    container_name: {{ cookiecutter.project_slug }}-service
+    depends_on:
+      - db
+      - broker
+    volumes:
+      - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
+    env_file: .env
+    stdin_open: true
+    tty: true
+    restart: on-failure
+  {%- endif %}

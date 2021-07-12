@@ -14,6 +14,7 @@ APPS_DIR = ROOT_DIR.child('{{ cookiecutter.project_slug }}')
 
 SECRET_KEY = config('SECRET_KEY', default=('0' * 50))
 DEBUG = config('DEBUG', default=False, cast=bool)
+SENTRY_DSN = config("SENTRY_DSN", default=None)
 
 {%- if cookiecutter.use_database_schema == "y" %}
 USE_SCHEMA = config('USE_SCHEMA', default=False, cast=bool)
@@ -78,6 +79,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = '{{ cookiecutter.project_slug }}.wsgi.application'
 
+# Sentry
+RAVEN_CONFIG = {"dsn": SENTRY_DSN}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

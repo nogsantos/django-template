@@ -1,1 +1,19 @@
-AMQP_URI: amqp://${RABBITMQ_USER:guest}:${RABBITMQ_PASSWORD:password}@${RABBITMQ_HOST:localhost}
+AMQP_URI: amqp://${RABBITMQ_USER:rabbit}:${RABBITMQ_PASSWORD:rabbit}@${RABBITMQ_HOST:broker}
+SENTRY:
+    DSN: ${SENTRY_DSN}
+
+LOGGING:
+    version: 1
+    formatters:
+      default:
+        format: '[%(asctime)s][%(levelname)s] %(name)s %(filename)s:%(funcName)s:%(lineno)d | %(message)s'
+        datefmt: '%H:%M:%S'
+    handlers:
+        default:
+            level: INFO
+            formatter: default
+            class: logging.StreamHandler
+    root:
+        level: INFO
+        propagate: True
+        handlers: [default]

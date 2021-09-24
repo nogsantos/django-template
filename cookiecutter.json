@@ -14,7 +14,7 @@
         "Apache Software License 2.0",
         "Not open source"
     ],
-    "python_version": "3.9.7",
+    "python_version": "3.9.6",
     "use_graphql": "n",
     "use_nameko": "n",
     "use_broker": "n",

@@ -1,11 +1,9 @@
 import os
-from shutil import copyfile
+import shutil
 
 
 def remove_heroku_files():
-    file_names = ["Procfile", "heroku.yml"]
-    for file_name in file_names:
-        os.remove(file_name)
+    __remove_files(["Procfile", "heroku.yml"])
 
 
 def remove_dottravisyml_file():
@@ -21,19 +19,21 @@ def remove_graphql_files():
 
 
 def remove_nameko_files():
-    file_names = ["core/sync.py", "config.yaml"]
-    for file_name in file_names:
-        os.remove(file_name)
+    __remove_files(["config.yaml"])
+    shutil.rmtree("core/services")
 
 
 def remove_open_source_files():
-    file_names = ["CONTRIBUTORS.txt", "LICENSE"]
-    for file_name in file_names:
-        os.remove(file_name)
+    __remove_files(["CONTRIBUTORS.txt", "LICENSE"])
 
 
 def copy_env_file():
-    copyfile("contrib/.env.sample", "./.env")
+    shutil.copyfile("contrib/.env.sample", "./.env")
+
+
+def __remove_files(files_name):
+    for file_name in files_name:
+        os.remove(file_name)
 
 
 def main():

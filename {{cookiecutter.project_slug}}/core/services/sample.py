@@ -27,7 +27,7 @@ class SampleService:
         Simple sample handler
         """
         logging.info(
-            f"Received event handler {len(payload or [])}"
+            "Received event handler %s", {len(payload or [])}
         )
 
     @rpc
@@ -35,4 +35,4 @@ class SampleService:
         """
         Simple sample rpc call
         """
-        logging.info(f"Received rpc call {len(payload or [])}")
+        logging.info("Received rpc call %s", {len(payload or [])})

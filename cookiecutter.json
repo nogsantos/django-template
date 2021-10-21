@@ -19,6 +19,7 @@
     "use_nameko": "n",
     "use_broker": "n",
     "use_heroku": "n",
+    "use_scheduler": "n",
     "ci_tool": [
         "None",
         "Travis",

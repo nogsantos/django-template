@@ -31,6 +31,9 @@ graphene-django = "==2.15.0"
 graphene-federation = "==0.1.0"
 graphene-sentry = "^0.4.0"
 {%- endif %}
+{% if cookiecutter.use_scheduler == "y" -%}
+schedule = "^1.1.0"
+{%- endif %}
 
 [tool.poetry.dev-dependencies]
 tox = "^3.23.1"

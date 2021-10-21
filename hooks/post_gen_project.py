@@ -20,7 +20,11 @@ def remove_graphql_files():
 
 def remove_nameko_files():
     __remove_files(["config.yaml"])
-    shutil.rmtree("core/services")
+    shutil.rmtree("services")
+
+
+def remove_scheduler_files():
+    os.remove("config/scheduler.py")
 
 
 def remove_open_source_files():
@@ -51,6 +55,9 @@ def main():
 
     if "{{ cookiecutter.use_nameko }}".lower() == "n":
         remove_nameko_files()
+
+    if "{{ cookiecutter.use_scheduler }}".lower() == "n":
+        remove_scheduler_files()
 
     if "{{ cookiecutter.open_source_license }}" == "Not open source":
         remove_open_source_files()

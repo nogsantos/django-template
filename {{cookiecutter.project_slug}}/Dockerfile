@@ -43,7 +43,16 @@ CMD ["dev"]
 FROM base_dev as service
 ENV DEBUG true
 ENV ELASTIC_APM_ENABLED false
-CMD ["nameko", "run", "--config", "config.yaml", "core.services"]
+CMD ["nameko", "run", "--config", "config.yaml", "services"]
+{%- endif %}
+{% if cookiecutter.use_scheduler == "y" -%}
+# =============================================================================
+# Scheduler
+# =============================================================================
+FROM base_dev as scheduler
+ENV DEBUG true
+ENV ELASTIC_APM_ENABLED false
+CMD ["python", "./config/scheduler.py"]
 {%- endif %}
 # =============================================================================
 # release prod

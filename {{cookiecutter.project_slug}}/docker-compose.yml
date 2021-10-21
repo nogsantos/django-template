@@ -56,3 +56,18 @@ services:
     tty: true
     restart: on-failure
   {%- endif %}
+  {% if cookiecutter.use_scheduler == "y" -%}
+  {{ cookiecutter.project_slug }}-scheduler:
+    build:
+      context: .
+      target: scheduler
+    container_name: {{ cookiecutter.project_slug }}-scheduler
+    depends_on:
+      - broker
+    volumes:
+      - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
+    env_file: .env
+    stdin_open: true
+    tty: true
+    restart: on-failure
+  {%- endif %}

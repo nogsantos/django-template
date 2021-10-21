@@ -6,7 +6,7 @@ from nameko.events import EventDispatcher, event_handler, SINGLETON
 from nameko.rpc import rpc, RpcProxy
 from nameko_sentry import SentryReporter
 
-from core.services.providers import DjangoModels
+from services.providers import DjangoModels
 
 
 class SampleService:

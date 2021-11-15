@@ -84,13 +84,15 @@ RAVEN_CONFIG = {"dsn": SENTRY_DSN}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-DEFAULT_DBURL = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+DATABASE_URL = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 DATABASES = {
-    'default': config('DATABASE_URL', default=DEFAULT_DBURL, cast=dburl)
+    'default': config('DATABASE_URL', default=DATABASE_URL, cast=dburl)
 }
 {%- if cookiecutter.use_database_schema == "y" %}
 if 'test' in sys.argv:
-    DATABASES['OPTIONS'] = {'options': '-c search_path={{ cookiecutter.project_slug }}'}
+    DATABASES['OPTIONS'] = {
+        'options': '-c search_path={{ cookiecutter.project_slug }}'
+    }
 elif USE_SCHEMA:
     DATABASES['default']['OPTIONS'] = {
         'options': '-c search_path={{ cookiecutter.project_slug }}'
@@ -104,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'  # noqa: E501
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'   # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'  # noqa: E501
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'  # noqa: E501
@@ -189,8 +191,7 @@ REST_FRAMEWORK = {
 # Send mail configurations
 # For development, use Mailcatcher: https://mailcatcher.me/
 EMAIL_BACKEND = config(
-    'EMAIL_BACKEND',
-    default='django.core.mail.backends.console.EmailBackend'
+    'EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend'
 )
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', cast=int, default=25)

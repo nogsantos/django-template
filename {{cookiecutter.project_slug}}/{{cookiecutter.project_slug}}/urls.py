@@ -18,10 +18,14 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('docs/', schema_view.with_ui('redoc', cache_timeout=0),
-         name='schema-redoc'),
+    path('api-auth', include('rest_framework.urls')),
+    path(
+        'docs/',
+        schema_view.with_ui('redoc', cache_timeout=0),
+        name='schema-redoc'
+    ),
     path('', include('core.urls'), name='core'),
-    {% if cookiecutter.use_graphql == "y" -%}
+    {%- if cookiecutter.use_graphql == "y" -%}
     path('graphql/', csrf_exempt(SentryGraphQLView.as_view(graphiql=True))),
     {%- endif %}
 ]

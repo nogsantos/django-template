@@ -7,4 +7,3 @@ class ExpenseAdmin(admin.ModelAdmin):
     readonly_fields = ['id']
     list_display = ['name', 'description', ...]
 """
-

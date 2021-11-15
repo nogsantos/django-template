@@ -26,7 +26,9 @@ COPY . /app/
 # linter
 # =============================================================================
 FROM base_dev AS linter
-RUN black --check --diff .
+# To Block when checking, add the flag
+#   `--check` to be like in the example: `black --check --diff .`
+RUN black --diff .
 # =============================================================================
 # development
 # =============================================================================

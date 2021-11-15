@@ -7,6 +7,4 @@ from core.views import CheckViewSet
 routers = DefaultRouter()
 routers.register('', CheckViewSet, basename='core')
 
-urlpatterns = [
-    path('', include(routers.get_urls()))
-]
+urlpatterns = [path('', include(routers.get_urls()))]

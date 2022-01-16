@@ -1,15 +1,50 @@
-version: "3.7"
+version: "3.9"
 
 volumes:
   pgdata:
 
+networks:
+  {{ cookiecutter.project_slug }}-network:
+    external: true # External as true, before the up command, the network must be created manually: docker network create {{ cookiecutter.project_slug }}-network
+
+x-{{ cookiecutter.project_slug }}-network:
+  &{{ cookiecutter.project_slug }}-network
+  networks:
+    - {{ cookiecutter.project_slug }}-network
+
+x-dependencies:
+  &dependencies
+  depends_on:
+    db:
+      condition: service_healthy
+    {% if cookiecutter.use_broker == "y" -%}
+    broker:
+      condition: service_healthy
+    {%- endif %}
+
+x-container_defaults:
+  &container_defaults
+  stdin_open: true
+  tty: true
+  restart: on-failure
+
+
 services:
+  #****************************************************************************
+  # INFRA-STRUCTURE
+  #****************************************************************************
   db:
     image: postgres
     hostname: db
     container_name: db
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    <<: *app_network
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -21,10 +56,19 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    <<: *app_network
     environment:
       - RABBITMQ_DEFAULT_USER=rabbit
       - RABBITMQ_DEFAULT_PASS=rabbit
   {%- endif %}
+  #****************************************************************************
+  # WORK SERVICES
+  #****************************************************************************
   {{ cookiecutter.project_slug }}:
     build:
       context: .
@@ -32,29 +76,27 @@ services:
     container_name: {{ cookiecutter.project_slug }}
     ports:
       - {{ cookiecutter.server_port }}:{{ cookiecutter.server_port }}
-    depends_on:
-      - db
     volumes:
       - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
     env_file: .env
-    stdin_open: true
-    tty: true
-    restart: on-failure
+    <<: [
+      *dependencies,
+      *app_network,
+      *container_defaults
+    ]
   {% if cookiecutter.use_broker == "y" -%}
   {{ cookiecutter.project_slug }}-service:
     build:
       context: .
       target: service
     container_name: {{ cookiecutter.project_slug }}-service
-    depends_on:
-      - db
-      - broker
     volumes:
       - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
-    env_file: .env
-    stdin_open: true
-    tty: true
-    restart: on-failure
+    <<: [
+      *dependencies,
+      *app_network,
+      *container_defaults
+    ]
   {%- endif %}
   {% if cookiecutter.use_scheduler == "y" -%}
   {{ cookiecutter.project_slug }}-scheduler:
@@ -62,12 +104,11 @@ services:
       context: .
       target: scheduler
     container_name: {{ cookiecutter.project_slug }}-scheduler
-    depends_on:
-      - broker
     volumes:
       - ./{{ cookiecutter.project_slug }}:/{{ cookiecutter.project_slug }}
-    env_file: .env
-    stdin_open: true
-    tty: true
-    restart: on-failure
+    <<: [
+      *dependencies,
+      *app_network,
+      *container_defaults
+    ]
   {%- endif %}

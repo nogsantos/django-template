@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
@@ -9,9 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if (
-            User.objects.filter(
-                is_staff=True, username=settings.ADMIN_USERNAME
-            ).count()
+            User.objects.filter(is_staff=True, username=settings.ADMIN_USERNAME).count()
             > 0
         ):
             self.stdout.write(

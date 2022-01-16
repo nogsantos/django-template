@@ -1,10 +1,10 @@
 {
     "project_name": "My best Django project",
-    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
+    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '-')|replace('-', '-')|replace('.', '-')|trim() }}",
     "description": "Django project description",
     "compose_service": "{{ cookiecutter.project_name.lower()|replace(' ', '-')|replace('_', '-') }}",
     "author_name": "Fabricio Nogueira",
-    "domain_name": "https://fabricionogueira.me",
+    "domain_name": "https://linktr.ee/nogsantos",
     "email": "nogsantos@gmail.com",
     "version": "0.1.0",
     "open_source_license": [

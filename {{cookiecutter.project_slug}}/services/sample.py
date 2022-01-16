@@ -1,7 +1,5 @@
 import logging
 
-from django.db.models import prefetch_related_objects
-
 from nameko.events import EventDispatcher, event_handler, SINGLETON
 from nameko.rpc import rpc, RpcProxy
 from nameko_sentry import SentryReporter
@@ -10,28 +8,24 @@ from services.providers import DjangoModels
 
 
 class SampleService:
-    name = "sample_service"
+    name = "{{ cookiecutter.project_slug }}_service"
 
     dispatch = EventDispatcher()
     sentry = SentryReporter()
     models = DjangoModels()
-    sampleservice = RpcProxy("sampleservice")
+    sampleservice = RpcProxy("{{ cookiecutter.project_slug }}_services")
 
     @event_handler(
-        "service",
-        "sync.sample.v1",
-        handler_type=SINGLETON,
+        "{{ cookiecutter.project_slug }}", "sync.{{ cookiecutter.project_slug }}.v1", handler_type=SINGLETON,
     )
-    def sample_handler(self, payload):
+    def {{ cookiecutter.project_slug }}_sync_handler(self, payload):
         """
-        Simple sample handler
+        Simple {{ cookiecutter.project_slug }} sample handler
         """
-        logging.info(
-            "Received event handler %s", {len(payload or [])}
-        )
+        logging.info("Received event handler %s", {len(payload or [])})
 
     @rpc
-    def sample_rpc(self, payload):
+    def {{ cookiecutter.project_slug }}_rpc_sample(self, payload):
         """
         Simple sample rpc call
         """

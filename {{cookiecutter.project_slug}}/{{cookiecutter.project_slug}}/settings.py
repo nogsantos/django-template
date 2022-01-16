@@ -211,3 +211,13 @@ GRAPHENE = {
 }
 
 {% endif %}
+
+{% if cookiecutter.use_broker == "y" -%}
+# Nameko
+RABBITMQ_USER = config("RABBITMQ_USER", "rabbit")
+RABBITMQ_PASSWORD = config("RABBITMQ_PASS", "rabbit")
+RABBITMQ_HOST = config("RABBITMQ_HOST", "broker")
+CONFIG_NAMEKO = {
+    "AMQP_URI": f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}"
+}
+{%- endif %}

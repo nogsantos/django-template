@@ -8,6 +8,7 @@ class Query(ObjectType):
     Arguments:
         ObjectType {[graphene]}
     """
+
     pass
 
 

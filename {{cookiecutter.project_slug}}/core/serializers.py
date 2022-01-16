@@ -1,18 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
 from rest_framework import serializers
 
-from core.models import Category
 
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = (
-            'id',
-            'name',
-            'description',
-            'created_at',
-            'updated_at',
-        )
-"""
+class HealthCheckSerializer(serializers.Serializer):
+    response = serializers.CharField(
+        max_length=2,
+        help_text="Response health check field",
+        required=False,
+        read_only=True,
+        default="OK",
+    )
